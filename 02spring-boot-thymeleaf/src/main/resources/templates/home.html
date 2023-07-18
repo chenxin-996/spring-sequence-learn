@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<!--引入thymeleaf名称空间-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Homepage</title>
+    <style>
+        .red {
+            color: red;
+            font-size: 50px;
+        }
+    </style>
+</head>
+<body>
+
+<!--引入片段方式一，th:include="视图文件名称::片段名称"-->
+<div th:include="~{base::header}"></div>
+
+<!--引入片段方式二，th:insert="~{视图文件名称::ID选择器名称}"-->
+<div th:insert="~{base::#footer}"></div>
+
+<hr>
+
+<!--引入片段方式三，th:replace="~{视图文件名称::ID选择器名称}"-->
+<div th:replace="base::body"></div>
+
+<!--在引入片段的书写格式时，可以省略~{}，但是通常为了易读性，通常建议写~{}-->
+
+<!--
+三种引入方式区别
+th:insert： 将公共的标签及内容插入到指定标签当中
+th:include：将公共标签的内容包含到指定标签当中
+th:replace：将公共的标签替换指定的标签，并且还会把所有的片段进行引入（实验证明）
+-->
+
+<hr>
+<br><br><br>
+
+<!--片段传值时不允许添加~{}-->
+<div th:include="base::byValue(active='byValue')"></div>
+
+<!--在script标签中通过th:inline="javascript"来声明这是要特殊处理的js脚本-->
+<script th:inline="javascript">
+    let result = 10 + 10;
+    console.log(result);
+</script>
+
+</body>
+
+</html>

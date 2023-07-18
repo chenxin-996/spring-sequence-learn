@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<!--引入thymeleaf名称空间-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Base</title>
+</head>
+<body>
+
+<!--
+在以前学习JSP时，公共样式需要单独放入一个文件
+好比头部一个文件，尾部一个文件，然后通过include进行引入
+而在Thymeleaf中可以可以把所有的公共样式放在一个文件中，以片段的形式进行截取
+-->
+
+<!--片段截取方式一-->
+<header th:fragment="header">
+    <h1>Header</h1>
+</header>
+
+<div th:fragment="body">
+    <h1>Body</h1>
+</div>
+
+<!--片段截取方式二-->
+<footer id="footer">
+    <h1>Footer</h1>
+</footer>
+
+<!--片段接收值-->
+<div th:fragment="byValue">
+    <h1 th:class="${active == 'byValue' ? 'red' : ''}">byValue</h1>
+</div>
+
+</body>
+</html>

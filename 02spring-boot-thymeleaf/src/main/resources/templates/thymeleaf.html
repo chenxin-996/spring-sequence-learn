@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<!--引入thymeleaf名称空间-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thymeleaf</title>
+</head>
+<body>
+
+<!--当没有使用指令时，就会显示静态文字，当服务器中存储数据时，可以通过指令进行动态显示-->
+<!--${}：变量表达式-->
+<h1 th:text="${name}">静态文字</h1>
+
+<!--获取对象-->
+<h1 th:text="${student}">静态文字</h1>
+<!--获取对象属性值方式一-->
+<h1 th:text="${student.name}">静态文字</h1>
+
+<div th:object="${student}">
+    <!--获取对象属性值方式二-->
+    <!--使用时需要在父标签中使用object指令进行声明对象，在子标签中即可使用*{对象属性名}获取对象属性值-->
+    <p th:text="*{name}"></p>
+    <p th:text="*{age}"></p>
+</div>
+
+<!--绝对URL用于创建到其他服务器的链接，它们需要指定一个协议名称(http://或https://)开头-->
+<a href="" th:href="@{https://www.baidu.com/}">链接跳转（绝对网址）</a>
+
+<hr>
+
+<!-- 与Web应用程序根相关联URL使用@{/资源名称}方式进行获取 -->
+<img src="" width="100" height="100" th:src="@{/images.png}" alt="">
+<!--上下文相关URL-->
+<img src="" width="100" height="100" th:src="@{/subdirectory/images.png}" alt="">
+<!--与服务器相关URL-->
+<img src="" width="100" height="100" th:src="@{~/images.png}" alt="">
+
+<hr>
+
+<!--如果有多个参数则使用逗号进行分割-->
+<a href="" th:href="@{https://www.baidu.com(name='沉心',age=18)}">链接跳转携带参数</a>
+
+<!--
+什么是字面值？
+有的时候，我们需要在指令中填写基本类型如：字符串、数值、布尔等
+但有时候并不希望被Thymeleaf解析为变量，这个时候称为字面值
+-->
+
+<!--字符串字面值-->
+<p th:text="'字面值'"></p>
+
+<!--数字字面值-->
+<p th:text="10"></p>
+<!--数字字面值可进行加减-->
+<p th:text="10 + 20"></p>
+
+<!--布尔字面值-->
+<p th:text="true"></p>
+<p th:text="true == false"></p>
+
+<!--字符串字面值可与变量值进行拼接-->
+<!--方式一-->
+<p th:text="'姓名：'+${student.name}"></p>
+<!--方式二-->
+<p th:text="|'地址：'${student.address}|"></p>
+
+<!--运算符-->
+<!--算术操作符-->
+<p th:text="${17 % 5 - 2}"></p>
+<p th:text="${17 % 6 / 4}"></p>
+
+<!--比较运算-->
+<!--
+>，<不能直接使用，因为xml会解析为标签，需要进行转义
+> gt
+< lt
+>= ge
+<= le
+-->
+<p th:text="${17 gt 2}"></p>
+<p th:text="${1 gt 2}"></p>
+
+<!--三元运算-->
+<p th:text="${1 gt 2} ? '大于' : '小于'"></p>
+
+<!--默认表达式-->
+<p th:text="null ?: '空值'"></p>
+<!--如果表达式为null，则显示默认值，如果不为null，则显示表达式本身-->
+<p th:text="${student.name} ?: '空值'"></p>
+
+<!--内联写法-->
+<div>
+    <!--方式一，会把变量值进行原样输出-->
+    [[${message}]]
+    <hr>
+    <!--方式二，会进行解析其中的HTML标签-->
+    [(${message})]
+</div>
+
+<!--局部变量-->
+<div th:with="tempStudent = ${allStudent[1]}">
+    <span th:text="${tempStudent.name}"></span>
+    <span th:text="${tempStudent.age}"></span>
+    <!--tempStudent只可在定义的子标签中使用，因此称tempStudent为局部变量-->
+</div>
+
+<!--条件判断-->
+当条件满足时, 才会显示标签
+<h1 th:if="${1 lt 2}">内容1</h1>
+
+<!--unless 是 与 if相反 不满足条件时 才会显示标签-->
+<h1 th:unless="${1 gt 2}">内容2</h1>
+
+<div th:switch="${student.age}">
+    <p th:case="18">18岁</p>
+    <p th:case="20">20岁</p>
+    <!--如果所有的case都不满足条件，就会执行th:case="*"-->
+    <p th:case="*">年龄未知</p>
+</div>
+
+<hr>
+
+<!--迭代（遍历）-->
+<table>
+    <!--方式一-->
+    <tr th:each="studentItem : ${allStudent}">
+        <td th:text="'姓名：'+${studentItem.name}"></td>
+        <td th:text="'年龄：'+${studentItem.age}"></td>
+    </tr>
+</table>
+
+<hr>
+
+<table>
+    <!--方式二，message包含了许多遍历信息，可直接调用-->
+    <tr th:each="studentItem , message : ${allStudent}">
+        <td th:text="'姓名：'+${studentItem.name}"></td>
+        <td th:text="'年龄：'+${studentItem.age}"></td>
+
+        <!--当前遍历的角标，从0开始-->
+        <td th:text="'当前遍历的角标：'+${message.index}"></td>
+        <!--当前遍历到第几个元素，从1开始-->
+        <td th:text="'当前遍历到第'+${message.count}+ '个元素'"></td>
+        <!--元素的总个数-->
+        <td th:text="'元素的总个数：'+${message.size}"></td>
+        <!--当前遍历的元素-->
+        <td th:text="'当前遍历的元素：'+${message.current}"></td>
+        <!--当前遍历的角标是否为偶数-->
+        <td th:text="'当前遍历的角标是否为偶数：'+${message.even}"></td>
+        <!--当前遍历的角标是否为奇数-->
+        <td th:text="'当前遍历的角标是否为奇数：'+${message.odd}"></td>
+        <!--当前遍历的元素是否为第一个-->
+        <td th:text="'当前遍历的元素是否为第一个：'+${message.first}"></td>
+        <!--当前遍历的元素是否为第最后一个-->
+        <td th:text="'当前遍历的元素是否为第最后一个：'+${message.last}"></td>
+    </tr>
+</table>
+
+<br><br><br>
+
+<hr>
+
+<!--内置对象-->
+<!--${#ctx}：上下文对象，可用于获取其它内置对象-->
+<!--${#vars}：上下文变量-->
+<!--${#locale}：上下文区域设置-->
+<!--${#request}：HttpServletRequest对象-->
+<!--${#response}：HttpServletResponse对象-->
+<!--${#session}：HttpSession对象-->
+<!--${#servletContext}：ServletContext对象-->
+
+<!--内置对象（全局对象功能）-->
+<!--#strings：字符串工具类-->
+<!--#lists：List工具类-->
+<!--#arrays：数组工具类-->
+<!--#sets：Set工具类-->
+<!--#maps：常用Map方法-->
+<!--#objects：一般对象类，通常用来判断非空-->
+<!--#bools：常用的布尔方法-->
+<!--#execInfo：获取页面模板的处理信息-->
+<!--#messages：在变量表达式中获取外部消息的方法，与使用＃{...}语法获取的方法相同-->
+<!--#uris：转义部分URL / URI的方法-->
+<!--#conversions：用于执行已配置的转换服务的方法-->
+<!--#dates：时间操作和时间格式化等-->
+<!--#calendars：用于更复杂时间的格式化-->
+<!--#numbers：格式化数字对象的方法-->
+<!--#aggregates：在数组或集合上创建聚合的方法-->
+<!--#ids：处理可能重复的id属性的方法-->
+
+<!--直接通过内置对象获取域中的内容-->
+<!--<p th:text="${#request.getAttribute('requestAttribute')}"></p>-->
+
+<!--以上代码不可用，Thymeleaf 3.1 删除基于 Web-API 的表达式实用程序对象-->
+<!--#request #response #session #servletContext-->
+
+<!--小写转换大写-->
+<p th:text="${#strings.toUpperCase('chenxin')}"></p>
+<!--截取0-10位，后面的全部用…这个点代替，注意，abbreviate的第二个参数最小单位是3-->
+<!--此时的3就相当于从第0位开始截取，剩余字符串使用...代替-->
+<p th:text="${#strings.abbreviate('chenxin',3)}"></p>
+<p th:text="${#strings.abbreviate('chenxin',5)}"></p>
+<p th:text="${#strings.abbreviate('chenxin666',8)}"></p>
+<!--通过观察页面效果（http://localhost:8080/thymeleaf）理解abbreviate用法-->
+
+</body>
+</html>
