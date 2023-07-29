@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <!--参数配置-->
+    <properties resource="config/generator.properties"/>
+    <!-- 配置 mysql 驱动jar包路径 -->
+    <classPathEntry location="${classPathEntry}"/>
+
+    <context id="mysql_tables" targetRuntime="MyBatis3">
+        <!--生成 mapper.xml 时覆盖原文件-->
+        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"/>
+        <!-- 是否生成默认注释 -->
+        <commentGenerator>
+            <!-- 是否去除自动生成的注释 true:是 false:否 -->
+            <property name="suppressAllComments" value="true"/>
+            <!-- 是否生成注释代时间戳 -->
+            <property name="suppressDate" value="true"/>
+        </commentGenerator>
+
+        <!-- 数据库连接 -->
+        <jdbcConnection driverClass="${driverClass}"
+                        connectionURL="${connectionURL}"
+                        userId="${userId}"
+                        password="${password}">
+        </jdbcConnection>
+
+        <javaTypeResolver>
+            <!-- 是否使用 bigDecimal, false 可自动转化以下类型（Long, Integer, Short, etc.） -->
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!-- 数据表对应的 model 层  -->
+        <javaModelGenerator targetPackage="${modelTargetPackage}" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!-- sql mapper 映射配置文件 -->
+        <sqlMapGenerator targetPackage="${sqlMapTargetPackage}" targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <!-- mybatis中的 mapper 接口 -->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="${javaClientTargetPackage}" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <!-- 数据表进行生成操作 schema:库名; tableName:表名; domainObjectName:对象名称 -->
+        <table schema="${schema}" tableName="${tableName}" domainObjectName="${domainObjectName}">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+    </context>
+</generatorConfiguration>

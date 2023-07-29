@@ -1,0 +1,22 @@
+server:
+  servlet:
+    context-path: /api
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/spring_sequence_learn?useUnicode=true&characterEncoding=UTF8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 1234
+
+mybatis:
+  check-config-location: true
+  config-location: "classpath:config/mybatis-config.xml"
+  mapper-locations: "classpath:mapper/*Mapper.xml"
+  type-aliases-package: "com.chenxin.mybatis.entity.*"
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} %clr(%5p) [%thread] %clr(%logger){cyan} : %msg%n"
+  level:
+    root: info
+    com.chenxin.mybatis: warn
